@@ -6,13 +6,16 @@ import java.util.List;
 
 public class Main {
 
-    // Método para leer el archivo CSV y devolver una lista de películas
-    public static List<String[]> leerCSV(String archivoCSV) {
+     /**
+     * Lee un archivo CSV y devuelve una lista con los datos de las películas.
+     * Devulve Una lista de Strings, donde cada uno contiene los datos de una película.
+     */
+    public static List<String[]> leercsv(String archivocsv) {
         List<String[]> peliculas = new ArrayList<>();
         String linea;
-        try (BufferedReader br = new BufferedReader(new FileReader(archivoCSV))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(archivocsv))) {
             while ((linea = br.readLine()) != null) {
-                // Dividimos la línea por comas para obtener los campos
+
                 String[] campos = linea.split(",");
                 peliculas.add(campos);
             }
@@ -22,11 +25,14 @@ public class Main {
         return peliculas;
     }
 
-    // Método para leer la plantilla HTML
-    public static String leerPlantilla(String archivoPlantilla) {
+    /**
+     * Lee un archivo de plantilla HTML y devuelve su contenido como una cadena de texto.
+     * Devuelve El contenido del archivo de plantilla como un String.
+     */
+    public static String leerPlantilla(String planti) {
         StringBuilder plantilla = new StringBuilder();
         try {
-            List<String> lineas = Files.readAllLines(Paths.get(archivoPlantilla));
+            List<String> lineas = Files.readAllLines(Paths.get(planti));
             for (String linea : lineas) {
                 plantilla.append(linea).append("\n");
             }
@@ -36,20 +42,23 @@ public class Main {
         return plantilla.toString();
     }
 
-    // Método para generar los archivos HTML
-    public static void generarHTML(String plantilla, List<String[]> peliculas) {
+    /**
+     * Genera archivos HTML para cada película en la lista proporcionada, utilizando una plantilla HTML.
+     * Los archivos generados se guardan en una carpeta 'salida'.
+     */
+    public static void generaht(String plantilla, List<String[]> peliculas) {
         // Asegurarse de que la carpeta "salida" esté vacía
         File carpetaSalida = new File("salida");
         if (!carpetaSalida.exists()) {
             carpetaSalida.mkdir();
         }
 
-        // Limpiar la carpeta de salida antes de generar nuevos archivos
+        // Limpia la carpeta de salida antes de generar nuevos archivos
         for (File file : carpetaSalida.listFiles()) {
             file.delete();
         }
 
-        // Iterar sobre las películas y generar un archivo HTML por cada una
+
         for (String[] pelicula : peliculas) {
             String contenidoHTML = plantilla
                     .replace("%%1%%", pelicula[0])
@@ -58,25 +67,28 @@ public class Main {
                     .replace("%%4%%", pelicula[3])
                     .replace("%%5%%", pelicula[4]);
 
-            // Nombre del archivo basado en el título y el ID de la película
-            String nombreArchivo = "salida/" + pelicula[1] + " - " + pelicula[0] + ".html";
+
+            String nombre = "salida/" + pelicula[1] + " - " + pelicula[0] + ".html";
 
             // Guardar el archivo HTML
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(nombreArchivo))) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(nombre))) {
                 writer.write(contenidoHTML);
             } catch (IOException e) {
                 System.err.println("Error al escribir el archivo HTML: " + e.getMessage());
             }
         }
     }
+    /**
+     * Método principal que coordina la lectura de los archivos CSV y plantilla, y genera los archivos HTML.
+     */
 
     public static void main(String[] args) {
-        // Leer archivo CSV y plantilla
-        List<String[]> peliculas = leerCSV("peliculas.csv");
+
+        List<String[]> peliculas = leercsv("peliculas.csv");
         String plantillaHTML = leerPlantilla("plantilla.html");
 
-        // Generar los archivos HTML
-        generarHTML(plantillaHTML, peliculas);
+
+        generaht(plantillaHTML, peliculas);
 
         System.out.println("Archivos HTML generados correctamente en la carpeta 'salida'.");
     }
