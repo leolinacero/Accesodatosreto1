@@ -47,13 +47,13 @@ public class Main {
      * Los archivos generados se guardan en una carpeta 'salida'.
      */
     public static void generaht(String plantilla, List<String[]> peliculas) {
-        // Asegurarse de que la carpeta "salida" esté vacía
+
         File carpetaSalida = new File("salida");
         if (!carpetaSalida.exists()) {
             carpetaSalida.mkdir();
         }
 
-        // Limpia la carpeta de salida antes de generar nuevos archivos
+
         for (File file : carpetaSalida.listFiles()) {
             file.delete();
         }
